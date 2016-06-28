@@ -10,9 +10,9 @@ except ImportError:
 import pylab
 
 class Plotter:
-    def __init__(self, monitors):
+    def __init__(self, parsers):
         self.plot_params = {'y_min': 0, 'y_max': 100, 'scale': 100, 'score': 'acc'}
-        self.monitors = monitors
+        self.parsers = parsers
     def set_plot_param(self, key, value):
         if key == 'y_min':
             pass
@@ -40,13 +40,13 @@ class Plotter:
         return y2
 
     def plot(self, x_field, y_field, monitor_id, title=None, legend=False, plot_params={}):
-        if self.monitors[monitor_id].status != LogStatus.ERROR:
+        if self.parsers[monitor_id].status != LogStatus.ERROR:
             for k in self.plot_params:
                 if k not in plot_params:
                     plot_params[k] = self.plot_params[k]
             if title is None:
                 title = monitor_id
-            data = self.monitors[monitor_id].get_data()
+            data = self.parsers[monitor_id].get_data()
             x = data[x_field]
             y = self.process_y(data[y_field][:])
             ax = pylab.plot(x, y)
@@ -68,15 +68,15 @@ class Plotter:
             if k not in plot_params:
                 plot_params[k] = self.plot_params[k]
         if monitor_ids == 'all':
-            ids = self.monitors.keys()
+            ids = self.parsers.keys()
         else:
             ids = monitor_ids
         pylab.figure()
         pylab.hold(True)
         l_legend = []
         for monitor_id in ids:
-            if self.monitors[monitor_id].status != LogStatus.ERROR:
-                data = self.monitors[monitor_id].get_data()
+            if self.parsers[monitor_id].status != LogStatus.ERROR:
+                data = self.parsers[monitor_id].get_data()
                 x = np.array(data[x_field])
                 for y_field in y_fields:
                     y = self.process_y(np.array(data[y_field]))
