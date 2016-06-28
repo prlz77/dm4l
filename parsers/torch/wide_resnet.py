@@ -24,6 +24,7 @@ class Parser(AbstractParser):
         super(Parser, self).__init__(log_path)
         self.solver_params = None
         self.buffer = ""
+        
     def update(self):
         if self.status != LogStatus.ERROR or (self.status == LogStatus.FINISHED and self.log_data == {}) or self.status == LogStatus.TRAINING:
             self.buffer += self.fp.read().replace('\t','')
