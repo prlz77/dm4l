@@ -1,14 +1,18 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
+from misc import LogStatus
 
-class Parser:
+class AbstractParser:
     __metaclass__ = ABCMeta
 
-    @abstractmethod
     def __init__(self, log_path):
         """
         :param log_path: path of the log file
+        :param id: Id for further reference to concrete parsers
         """
-        return
+        self.fp = open(log_path, 'r')
+        self.log_data = {}
+        self.log_path = log_path
+        self.status = LogStatus.INIT # INIT, TRAINING, ERROR, FINISHED
 
     @abstractmethod
     def get_data(self):
@@ -21,3 +25,9 @@ class Parser:
                     custom fields
         """
         return
+
+    @abstractmethod
+    def update(self):
+        """
+        Appends file updates to the log
+        """
