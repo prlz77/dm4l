@@ -41,6 +41,9 @@ if __name__ == '__main__':
         logger.setLevel(logging.FATAL)
     else:
         logger.setLevel(logging.INFO)
+        with open('logo.txt','r') as infile:
+            logger.info(infile.read())
+            [h.flush() for h in logger.handlers]
 
     dm4l = DM4L()
     if args.logs is not None and args.backends is not None:

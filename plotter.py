@@ -1,19 +1,19 @@
 import logging
-import matplotlib
+import StringIO
 import numpy as np
 from misc import LogStatus
-
-matplotlib.use('TkAgg')
+import urllib
 try:
     import seaborn as sns
 except ImportError:
     logging.getLogger('dm4l').info('Install seaborn for nice looking plots.')
-
 import pylab
-pylab.ion()
+
 
 class Plotter:
-    def __init__(self, dm4l):
+    def __init__(self, dm4l, frontend=True):
+        if frontend:
+            pylab.ioff()
         self.plot_params = {'y_min': 0, 'y_max': 100, 'scale': 100, 'score': 'acc'}
         self.dm4l = dm4l
 
@@ -64,7 +64,6 @@ class Plotter:
             pylab.ylim(plot_params['y_min'], plot_params['y_max'])
             if legend:
                 pylab.legend([y_field])
-            pylab.show()
         else:
             return False
         return True
@@ -81,7 +80,7 @@ class Plotter:
         for k in self.plot_params:
             if k not in plot_params:
                 plot_params[k] = self.plot_params[k]
-        #pylab.figure()
+
         pylab.hold(True)
         pylab.cla()
         l_legend = []
@@ -107,6 +106,14 @@ class Plotter:
         if legend:
             pylab.legend(l_legend)
 
-        pylab.draw()
-        pylab.pause(0.0001)
+        pylab.pause(0.0000001)
         return True
+
+    def get_img(self):
+        imgdata = StringIO.StringIO()
+        pylab.gcf().savefig(imgdata, format='png')
+        imgdata.seek(0)  # rewind the data
+        return 'data:image/png;base64,' + urllib.quote(base64.b64encode(imgdata.buf))
+
+    def save(self, path):
+        pylab.savefig(path)

@@ -1,6 +1,6 @@
 import sys
 import time
-
+import logging
 from misc import Commands
 
 
@@ -17,11 +17,12 @@ class Monitor():
         self.options = options
 
     def print_max(self):
-        max = self.dm4l.get_max()
-        res = []
-        for i in self.options['format']:
-            res.append(str(max[i]))
-        print ' '.join(res)
+        if len(self.dm4l.get_parsers()) > 0:
+            max = self.dm4l.get_max()
+            res = []
+            for i in self.options['format']:
+                res.append(str(max[i]))
+            print ' '.join(res)
 
     def plot(self):
         if 'title' not in self.options:
@@ -42,13 +43,13 @@ class Monitor():
             self.plot()
 
     def run(self):
-        print 'Running monitor...'
+        logging.getLogger('dm4l').info('Running monitor...')
         try:
             while not self.end:
                 self.update()
                 time.sleep(1)
         except KeyboardInterrupt:
-            print >> sys.stderr, '\nExiting by user request.\n'
+            logging.getLogger('dm4l').warn('\nExiting by user request.\n')
             sys.exit(0)
 
     def run_once(self):

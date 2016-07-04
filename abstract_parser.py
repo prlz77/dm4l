@@ -15,6 +15,7 @@ class AbstractParser:
         """
         self.fp = open(log_path, 'r')
         self.log_data = {}
+        self.persistent_log_data = {}
         self.log_path = log_path
         self.status = LogStatus.INIT # INIT, TRAINING, ERROR, FINISHED
         self.parser_settings = {}

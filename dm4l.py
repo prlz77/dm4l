@@ -40,7 +40,7 @@ class DM4L:
 
     def add_log(self, log_path, backend_parser, id=None, pid=None):
         for k in self.parsers:
-            if k == id or log_path == self.parsers[k].log_path:
+            if k == id:
                 return None
         if backend_parser in self.available_parsers:
             parser_module = import_module(backend_parser)
@@ -48,7 +48,7 @@ class DM4L:
             if id is None:
                 id = log_path
             self.parsers[id] = parser
-            logger.info('New log with id %s was added.' %id)
+            logger.info('New log with id = %s was added.' %id)
         else:
             msg = "Backend %s not recognized\n" % (backend_parser)
             msg += "Please use one in %s (or call func get_backends()to list them)" % (str(self.available_parsers))
@@ -59,10 +59,10 @@ class DM4L:
     def remove_log(self, id='', path='./'):
         keys = self.parsers.keys()
         for k in keys:
-            if k == id or os.path.samefile(self.parsers[k].log_path, path):
+            if k == id or self.parsers[k].log_path == path:
                 self.parsers[k].fp.close()
                 self.parsers.pop(k, None)
-                logger.info('logger with id:%s was removed' %k)
+                logger.info('logger with id = %s was removed' %k)
 
     def remove_all_logs(self):
         keys = self.parsers.keys()
@@ -112,6 +112,8 @@ class DM4L:
                     pid = None
                     if len(spline) >= 3:
                         id=spline[2]
+                    else:
+                        id = spline[0]
                     if len(spline) == 4:
                         pid=spline[3]
                     self.add_log(spline[0], spline[1], id, pid)
@@ -120,7 +122,7 @@ class DM4L:
 
         keys = self.parsers.keys()
         for k in keys:
-            if k not in ids and self.parsers[k].log_path not in paths:
+            if k not in ids:
                 self.remove_log(id=k)
 
     def get_max(self, parser_ids='all', value_field='test_acc'):
