@@ -1,18 +1,22 @@
+import logging
+import matplotlib
 import numpy as np
 from misc import LogStatus
-import matplotlib
+
 matplotlib.use('TkAgg')
 try:
     import seaborn as sns
 except ImportError:
-    print 'Install seaborn for nice looking plots.'
+    logging.getLogger('dm4l').info('Install seaborn for nice looking plots.')
 
 import pylab
+pylab.ion()
 
 class Plotter:
-    def __init__(self, parsers):
+    def __init__(self, dm4l):
         self.plot_params = {'y_min': 0, 'y_max': 100, 'scale': 100, 'score': 'acc'}
-        self.parsers = parsers
+        self.dm4l = dm4l
+
     def set_plot_param(self, key, value):
         if key == 'y_min':
             pass
@@ -39,53 +43,60 @@ class Plotter:
 
         return y2
 
-    def plot(self, x_field, y_field, monitor_id, title=None, legend=False, plot_params={}):
-        if self.parsers[monitor_id].status != LogStatus.ERROR:
+    def plot(self, x_field, y_field, parser_id, title=None, legend=False, plot_params={}):
+        assert(type(y_field) == str)
+        if len(self.dm4l.get_parsers().keys()) == 0:
+            return True
+
+        if self.dm4l.get_parsers()[parser_id].status != LogStatus.ERROR:
             for k in self.plot_params:
                 if k not in plot_params:
                     plot_params[k] = self.plot_params[k]
             if title is None:
-                title = monitor_id
-            data = self.parsers[monitor_id].get_data()
+                title = parser_id
+            data = self.dm4l.get_parsers()[parser_id].get_data()
             x = data[x_field]
-            y = self.process_y(data[y_field][:])
+            y = self.process_y(np.array(data[y_field][:]))
             ax = pylab.plot(x, y)
             pylab.title(title)
             pylab.xlabel(x_field)
             pylab.ylabel(y_field)
             pylab.ylim(plot_params['y_min'], plot_params['y_max'])
             if legend:
-                ax.legend([y_field])
+                pylab.legend([y_field])
             pylab.show()
         else:
             return False
         return True
 
-    def multi_plot(self, x_field, y_fields, monitor_ids='all', title=None, legend=False, plot_params={}):
+    def multi_plot(self, x_field, y_fields, parser_ids='all', title=None, legend=False, plot_params={}):
+        if len(self.dm4l.get_parsers().keys()) == 0:
+            return True
+        if parser_ids == 'all':
+            ids = self.dm4l.get_parsers().keys()
+        else:
+            ids = parser_ids
         assert (type(y_fields) == list)
-        assert (type(monitor_ids) == list)
+        assert (type(ids) == list)
         for k in self.plot_params:
             if k not in plot_params:
                 plot_params[k] = self.plot_params[k]
-        if monitor_ids == 'all':
-            ids = self.parsers.keys()
-        else:
-            ids = monitor_ids
-        pylab.figure()
+        #pylab.figure()
         pylab.hold(True)
+        pylab.cla()
         l_legend = []
-        for monitor_id in ids:
-            if self.parsers[monitor_id].status != LogStatus.ERROR:
-                data = self.parsers[monitor_id].get_data()
+        for parser_id in ids:
+            if self.dm4l.get_parsers()[parser_id].status != LogStatus.ERROR:
+                data = self.dm4l.get_parsers()[parser_id].get_data()
                 x = np.array(data[x_field])
                 for y_field in y_fields:
                     y = self.process_y(np.array(data[y_field]))
                     pylab.plot(x, y)
                     pylab.xlabel(x_field)
                     if len(set(y_fields)) == 1:
-                        l_legend += [monitor_id]
+                        l_legend += [parser_id]
                     else:
-                        l_legend += [y_field + ' ' + monitor_id]
+                        l_legend += [y_field + ' ' + parser_id]
             else:
                 return False
         if len(set(y_fields)) == 1:
@@ -95,5 +106,7 @@ class Plotter:
         pylab.ylim(plot_params['y_min'], plot_params['y_max'])
         if legend:
             pylab.legend(l_legend)
-        pylab.show()
+
+        pylab.draw()
+        pylab.pause(0.0001)
         return True

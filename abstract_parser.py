@@ -1,5 +1,9 @@
-from abc import ABCMeta, abstractmethod, abstractproperty
+import logging
+from abc import ABCMeta, abstractmethod
+
 from misc import LogStatus
+
+parser_settings = {}
 
 class AbstractParser:
     __metaclass__ = ABCMeta
@@ -13,7 +17,7 @@ class AbstractParser:
         self.log_data = {}
         self.log_path = log_path
         self.status = LogStatus.INIT # INIT, TRAINING, ERROR, FINISHED
-
+        self.parser_settings = {}
     @abstractmethod
     def get_data(self):
         """
@@ -27,7 +31,20 @@ class AbstractParser:
         return
 
     @abstractmethod
-    def update(self):
+    def _update(self):
         """
         Appends file updates to the log
         """
+
+    def update(self):
+        """
+        Makes the update step safe. There is no need to override.
+        """
+        if self.status != LogStatus.ERROR or \
+          (self.status == LogStatus.FINISHED and self.log_data == {}) or \
+           self.status == LogStatus.TRAINING:
+            try:
+                self._update()
+            except:
+                self.status = LogStatus.ERROR
+                logging.getLogger('dm4l').warn("Error parsing %s" %self.log_path)
