@@ -1,3 +1,23 @@
+# -*- coding: utf-8 -*-
+# Author: prlz77 <pau.rodriguez at gmail.com>
+# Group: ISELAB@CVC-UAB
+# Date: 05/07/2016
+"""
+Dark magic commandline interface.
+
+How to use it
+=============
+1. Run-once mode, like any other shell command. For instance:
+``python main.py --silent --path ./logs/*.log backend max --format 2 0 1``
+The ``--silent`` option is needed so that only the output is printed. Then we can use pipes, for instance.
+This will output three values:  path_of_the_log_with_max_accuracy max_accuracy argmax_accuracy
+
+2. Monitor mode, to report in "real" time.
+``python main.py --refresh 1 --path ./logs/*.log backend plot``
+This will read all the logs matching the pattern and plot them in real time. It will refresh
+every 1 seconds.
+"""
+
 import os
 import sys
 import logging
@@ -9,15 +29,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from graphics.config import plot_conf
 from dm4l import DM4L
 
-
-
-def plot(dm4l, x, y, title, legend, plot_params):
-    dm4l.plotter.multi_plot(x, y, 'all', title, legend, plot_params)
-
 if __name__ == '__main__':
     dm4l = DM4L()
     parser = argparse.ArgumentParser(description='~ Dark Magic 4 Logs ~')
-
+    # Global arguments
     group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument('--logs', type=str, nargs=2, help="""log_path1,log_path2 backend1[,backend2...]
     The backend should be in %s""" %str(dm4l.get_backends()))
@@ -26,16 +41,19 @@ if __name__ == '__main__':
     parser.add_argument('--safe', action='store_false', help="Ignore erroneous logs")
     parser.add_argument('--silent', action='store_true', help='Do not show warnings')
     parser.add_argument('--refresh', type=int, default=0, help="Seconds to refresh data. 0 = run once.")
+    # Subcommand arguments
     subparsers = parser.add_subparsers(dest='subcommand')
+    #    max subcommand
     parser_max = subparsers.add_parser('max')
     parser_max.add_argument('--format', default=[0], type=int, nargs='+',
                         help="any combination of 0,1,2 where 0 = max, 1 = argmax, 2 = maxid. Ex: 0 2 = max_value id")
+    #    plot subcommand
     parser_plot = subparsers.add_parser('plot')
     parser_plot.add_argument('-x', type=str, default=plot_conf['x'], help="Data to show in x axis.")
     parser_plot.add_argument('-y', type=str, nargs='+', default=plot_conf['y'], help="Data to show in y axis.")
     parser_plot.add_argument('--title', type=str, default='')
 
-
+    # report subcommand
     #parser_report = subparsers.add_parser('--report')
 
     args = parser.parse_args()

@@ -6,7 +6,7 @@ import urllib
 import matplotlib
 from graphics.config import plot_conf
 from copy import deepcopy
-matplotlib.use('TKAgg')
+#matplotlib.use('TKAgg')
 try:
     import seaborn as sns
 except ImportError:

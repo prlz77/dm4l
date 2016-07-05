@@ -1,9 +1,22 @@
+# -*- coding: utf-8 -*-
+# Author: prlz77 <pau.rodriguez at gmail.com>
+# Group: ISELAB@CVC-UAB
+# Date: 05/07/2016
+"""Dark Magic For Logs (DM4L)
+
+Uses dark magic to deal with epoch/score logs in any format. It allows:
+
+- **Comparing** different logs. For example getting the max accuracy between model1 trained in torch and model2 trained
+  in caffe. Or even **plotting** them.
+- **Monitoring** logs. See if your models are training correctly, program early stopping, etc.
+- Information **reports**. Like a framework-agnostic NVIDIA DIGITS.
+
+"""
+
 import glob
 import os
-from importlib import import_module
-
 import numpy as np
-
+from importlib import import_module
 from graphics.plotter import Plotter
 from logger import logger
 from misc import LogStatus
