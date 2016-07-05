@@ -17,7 +17,7 @@ class Monitor():
         self.options = options
 
     def print_max(self):
-        if len(self.dm4l.get_parsers()) > 0:
+        if len(self.dm4l.get_handlers()) > 0:
             max = self.dm4l.get_max()
             res = []
             for i in self.options['format']:
@@ -25,27 +25,23 @@ class Monitor():
             print ' '.join(res)
 
     def plot(self):
-        if 'title' not in self.options:
-            self.options['title'] = ''
-        if 'legend' not in self.options:
-            self.options['legend'] = False
-        if 'format' not in self.options:
-            self.options['format'] = {}
         self.dm4l.plotter.multi_plot(self.options['x'], self.options['y'],
-                                     'all', self.options['title'], self.options['legend'], self.options['format'])
+                                     'all', self.options['title'])
 
     def update(self):
-        self.dm4l.add_remove_from_file()
-        self.dm4l.update()
-        if self.command == Commands.MAX:
-            self.print_max()
-        elif self.command == Commands.PLOT:
-            self.plot()
+        if self.dm4l.update():
+            if self.command == Commands.MAX:
+                self.print_max()
+            elif self.command == Commands.PLOT:
+                self.plot()
+        if self.command == Commands.PLOT:
+            self.dm4l.plotter.update_gui()  # so that zoom, etc can be used. Use a thread?
 
     def run(self):
         logging.getLogger('dm4l').info('Running monitor...')
         try:
             while not self.end:
+                self.dm4l.update_input()
                 self.update()
                 time.sleep(1)
         except KeyboardInterrupt:
@@ -53,4 +49,5 @@ class Monitor():
             sys.exit(0)
 
     def run_once(self):
+        self.dm4l.plotter.set_persistent(True)
         self.update()

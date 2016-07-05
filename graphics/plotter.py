@@ -3,6 +3,10 @@ import StringIO
 import numpy as np
 from misc import LogStatus
 import urllib
+import matplotlib
+from graphics.config import plot_conf
+from copy import deepcopy
+matplotlib.use('TKAgg')
 try:
     import seaborn as sns
 except ImportError:
@@ -14,8 +18,15 @@ class Plotter:
     def __init__(self, dm4l, frontend=True):
         if frontend:
             pylab.ioff()
-        self.plot_params = {'y_min': 0, 'y_max': 100, 'scale': 100, 'score': 'acc'}
+        self.plot_params = deepcopy(plot_conf)
         self.dm4l = dm4l
+        self.persistent = False
+        self.prev_data = {}
+        pylab.hold(True)
+
+    def set_persistent(self, value):
+        assert(type(value) == bool)
+        self.persistent = value
 
     def set_plot_param(self, key, value):
         if key == 'y_min':
@@ -43,70 +54,54 @@ class Plotter:
 
         return y2
 
-    def plot(self, x_field, y_field, parser_id, title=None, legend=False, plot_params={}):
-        assert(type(y_field) == str)
-        if len(self.dm4l.get_parsers().keys()) == 0:
+    def update_gui(self):
+        if not self.persistent:
+            pylab.pause(0.0000001)
+        else:
+            pylab.show()
+
+    def multi_plot(self, x_field, y_fields, handler_ids='all', title=None, plot_params={}):
+        pylab.cla()
+        if len(self.dm4l.get_handlers().keys()) == 0:
             return True
 
-        if self.dm4l.get_parsers()[parser_id].status != LogStatus.ERROR:
-            for k in self.plot_params:
-                if k not in plot_params:
-                    plot_params[k] = self.plot_params[k]
-            if title is None:
-                title = parser_id
-            data = self.dm4l.get_parsers()[parser_id].get_data()
-            x = data[x_field]
-            y = self.process_y(np.array(data[y_field][:]))
-            ax = pylab.plot(x, y)
-            pylab.title(title)
-            pylab.xlabel(x_field)
-            pylab.ylabel(y_field)
-            pylab.ylim(plot_params['y_min'], plot_params['y_max'])
-            if legend:
-                pylab.legend([y_field])
+        if handler_ids == 'all':
+            ids = self.dm4l.get_handlers().keys()
         else:
-            return False
-        return True
-
-    def multi_plot(self, x_field, y_fields, parser_ids='all', title=None, legend=False, plot_params={}):
-        if len(self.dm4l.get_parsers().keys()) == 0:
-            return True
-        if parser_ids == 'all':
-            ids = self.dm4l.get_parsers().keys()
-        else:
-            ids = parser_ids
+            ids = handler_ids
         assert (type(y_fields) == list)
         assert (type(ids) == list)
         for k in self.plot_params:
             if k not in plot_params:
                 plot_params[k] = self.plot_params[k]
 
-        pylab.hold(True)
-        pylab.cla()
         l_legend = []
-        for parser_id in ids:
-            if self.dm4l.get_parsers()[parser_id].status != LogStatus.ERROR:
-                data = self.dm4l.get_parsers()[parser_id].get_data()
+        for handler_id in ids:
+            if self.dm4l.get_handlers()[handler_id].status != LogStatus.ERROR:
+                data = self.dm4l.get_handlers()[handler_id].get_data()
                 x = np.array(data[x_field])
                 for y_field in y_fields:
                     y = self.process_y(np.array(data[y_field]))
                     pylab.plot(x, y)
                     pylab.xlabel(x_field)
                     if len(set(y_fields)) == 1:
-                        l_legend += [parser_id]
+                        l_legend += [handler_id]
                     else:
-                        l_legend += [y_field + ' ' + parser_id]
+                        l_legend += [y_field + ' ' + handler_id]
             else:
                 return False
+
         if len(set(y_fields)) == 1:
             pylab.ylabel(y_field)
         if title is not None:
             pylab.title(title)
-        pylab.ylim(plot_params['y_min'], plot_params['y_max'])
-        if legend:
-            pylab.legend(l_legend)
+        if plot_params['y_min'] != 'auto':
+            pylab.ylim(ymin=plot_params['y_min'])
+        elif plot_params['y_max'] != 'auto':
+            pylab.ylim(ymax=plot_params['y_max'])
+        if plot_params['legend']:
+            pylab.legend(l_legend).draggable()
 
-        pylab.pause(0.0000001)
         return True
 
     def get_img(self):

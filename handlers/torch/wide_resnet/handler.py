@@ -1,5 +1,5 @@
 import json
-from abstract_parser import AbstractParser
+from abstract_log_handler import AbstractLogHandler
 from misc import LogStatus
 
 def match(start_symbol, end_symbol, buffer):
@@ -19,13 +19,14 @@ def match(start_symbol, end_symbol, buffer):
         iter += 1
     return start_iter, end_iter
 
-class Parser(AbstractParser):
+class LogHandler(AbstractLogHandler):
     def __init__(self, log_path, settings={}):
-        super(Parser, self).__init__(log_path)
+        super(LogHandler, self).__init__(log_path)
         self.solver_params = None
         self.buffer = ""
 
-    def _update(self):
+    def parse(self):
+        changed = False
         self.buffer += self.fp.read().replace('\t','')
         line = ''
         buffer_list = self.buffer.split('\n')
@@ -39,14 +40,16 @@ class Parser(AbstractParser):
                     for field in data:
                         if field not in self.log_data:
                             self.log_data[field] = [data[field]]
+                            changed = True
                         else:
                             self.log_data[field] += [data[field]]
+                            changed = True
         if line != '':
             if line[-1] == '}':
                 self.buffer = ''
             elif line != '':
                 self.buffer = line
-
+        return changed
 
 
     def get_data(self):
