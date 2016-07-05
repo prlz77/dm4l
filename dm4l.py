@@ -9,7 +9,7 @@ Uses dark magic to deal with epoch/score logs in any format. It allows:
 - **Comparing** different logs. For example getting the max accuracy between model1 trained in torch and model2 trained
   in caffe. Or even **plotting** them.
 - **Monitoring** logs. See if your models are training correctly, program early stopping, etc.
-- Information **reports**. Like a framework-agnostic NVIDIA DIGITS.
+- Information **reports**. Create a report with your training log data and serve it like in NVIDIA DIGITS.
 
 """
 
@@ -23,9 +23,17 @@ from misc import LogStatus
 
 
 class DM4L:
+    """
+    The main module of the project.
+    Handles multiple logs and extracts information from them.
+    """
+
     FROM_FILE = 1
+    """ Input from file flag """
     FROM_FOLDER = 2
+    """ Input from folder flag """
     FROM_LIST = 3
+    """ Input from  list flag """
 
     def __init__(self):
         self.available_handlers = []
@@ -50,26 +58,54 @@ class DM4L:
         return
 
     def set_safe(self, value):
+        """
+        Sets ``self.safe``. When safe, handlers reporting errors are ignored.
+
+        :param value: ``bool``
+        """
         self.safe = value
 
     def set_input(self, mode, input):
+        """Tells DM4L where to look for the log files.
+
+        :param mode: Choose from ```{DM4L.FROM_FILE, DM4L.FROM_FOLDER, DM4L.FROM_LIST}```
+        :param input: If mode is
+        - DM4L.FROM_FILE: path ``string`` to a file with ``log_path<space>backend<space>[id<space>pid<space>]``\n
+        - DM4L.FROM_FOLDER: path ``string`` to the logs. E.g. './*.txt'
+        - DM4L.FROM_LIST: ``[string list, string list]`` like  ``[[log1,log2,etc],[backend1,backend2,etc]]``
+
+        """
         self.remove_all_logs()
         if mode in [DM4L.FROM_FILE, DM4L.FROM_FOLDER]:
             self.input_mode = mode
         elif mode == DM4L.FROM_LIST:
             self.input_mode = mode
+            for log, backend in zip(input[0], input[1]):
+                self.add_log(log, backend)
         self.input = input
 
     def update_input(self):
+        """ Updates the list of handled logs.
+
+        :return:
+        """
         if self.input_mode == DM4L.FROM_FILE:
             self.add_from_file()
         elif self.input_mode == DM4L.FROM_FOLDER:
             self.add_from_folder(self.input[0], self.input[1])
 
     def get_backends(self):
+        """ Gets the backend handlers.
+
+        :return: A list with all the available backends.
+        """
         return self.available_handlers
 
     def get_handlers(self):
+        """
+
+        :return:
+        """
         if self.safe:
             return self.get_safe_handlers()
         else:
