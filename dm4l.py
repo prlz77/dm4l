@@ -45,23 +45,9 @@ class DM4L:
         self.input_mode = None
         self.safe = False
         self.plugins = {}
-        self.load_plugins()
         self.get_available_handlers()
         self.active_plugins = []
         self.end = False
-
-    def load_plugins(self):
-        path = os.path.join(self.dark_path,'plugins')
-        for d in os.listdir(path):
-            path2 = os.path.join(path, d)
-            if os.path.isdir(path2):
-                if 'plugin.py' in os.listdir(path2):
-                    plugin = import_module("%s.%s.%s" %('plugins', d, 'plugin'))
-                    if 'config.py' in os.listdir(path2):
-                        config = import_module("%s.%s.%s" %('plugins', d, 'config')).config
-                    else:
-                        config = {}
-                    self.plugins[d] = plugin.Plugin(self, config)
 
     def get_plugins(self):
         return self.plugins
@@ -71,11 +57,18 @@ class DM4L:
 
     def set_active_plugin(self, name, active, extra_config={}):
         if active:
-            if name in self.plugins:
-                for k in extra_config:
-                    self.plugins[name].set_config(k, extra_config[k])
-            else:
-                logging.getLogger('dm4l').warn("Inexistent plugin.")
+            if name not in self.plugins:
+                path = os.path.join('plugins', name)
+                if os.path.isdir(path):
+                    if 'plugin.py' in os.listdir(path):
+                        plugin = import_module("%s.%s.%s" % ('plugins', name, 'plugin'))
+                        if 'config.py' in os.listdir(path):
+                            config = import_module("%s.%s.%s" % ('plugins', name, 'config')).config
+                        else:
+                            config = {}
+                        self.plugins[name] = plugin.Plugin(self, config)
+            for k in extra_config:
+                self.plugins[name].set_config(k, extra_config[k])
             if name not in self.active_plugins:
                 self.active_plugins.append(name)
                 logging.getLogger('dm4l').info("Activated %s" %name)
@@ -283,28 +276,6 @@ class DM4L:
 
         self.log_handlers = {}
 
-    def get_max(self, handler_ids='all', value_field='test_acc'):
-        """ Get the max score value from a log or log list.
-
-        :param handler_ids: list of the log ids to compare.
-        :param value_field: metric to compare.
-        :return: (max value, argmax value, id)
-        """
-        if handler_ids == 'all':
-            handler_ids = self.log_handlers.keys()
-        assert (type(handler_ids) == list)
-        max_list = np.zeros(len(handler_ids))
-        arg_list = np.zeros(len(handler_ids))
-        for i, handler_id in enumerate(handler_ids):
-            y = self.log_handlers[handler_id].log_data[value_field]
-            max_list[i] = np.max(y)
-            arg_list[i] = np.argmax(y)
-
-        max = np.max(max_list)
-        id = handler_ids[np.argmax(max_list)]
-        arg = arg_list[np.argmax(max_list)]
-        return max, arg, id
-
     def run(self):
         if self.refresh > 0:
             logging.getLogger('dm4l').info('Running...')
@@ -319,6 +290,7 @@ class DM4L:
                 logging.getLogger('dm4l').warn('\nExiting by user request.\n')
                 sys.exit(0)
         else:
+            self.update_input()
             self.update()
             for plugin in self.active_plugins:
                 self.plugins[plugin].update()

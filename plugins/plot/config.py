@@ -11,7 +11,6 @@ config = {
     ########################
     #      GUI CONFIG      #
     ########################
-    "dynamic": True,    # if the plot can dynamically change.
     "frontend": True,   # set false when missing display and want to save images
     "legend": True,     # show legend
     "xlabel": "",

@@ -8,7 +8,7 @@ import numpy as np
 from misc import LogStatus
 from plugins.AbstractPlugin import AbstractPlugin
 import matplotlib
-matplotlib.use('QT4Agg')
+#matplotlib.use('QT4Agg')
 try:
     import seaborn as sns
 except ImportError:
@@ -75,7 +75,7 @@ class Plugin(AbstractPlugin):
         return y2
 
     def _update_gui(self):
-        if self.config['dynamic']:
+        if self.dm4l.refresh > 0:
             pylab.pause(0.0000001)
         else:
             pylab.show()

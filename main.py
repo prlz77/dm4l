@@ -38,7 +38,7 @@ if __name__ == '__main__':
     group.add_argument('--logs', type=str, nargs=2, help="""log_path1,log_path2 backend1[,backend2...]
     The backend should be in %s""" %str(dm4l.get_available_handlers()))
     group.add_argument('--file', type=str, default='./monitors.conf', help="Reads: log_path<space>backend\\nlog_path... from here")
-    group.add_argument('--path', type=str, default=None, nargs=2, help="Reads all logs in path. Ex. --from_path ./*.log")
+    group.add_argument('--path', type=str, default=None, nargs=2, help="Reads all logs in path. Ex. --path ./*.log")
     parser.add_argument('--safe', action='store_false', help="Ignore erroneous logs")
     parser.add_argument('--silent', action='store_true', help='Do not show warnings')
     parser.add_argument('--refresh', type=int, default=0, help="Seconds to refresh data. 0 = run once.")
