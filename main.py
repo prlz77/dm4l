@@ -18,15 +18,16 @@ This will read all the logs matching the pattern and plot them in real time. It 
 every 1 seconds.
 """
 
+import argparse
+import logging
 import os
 import sys
-import logging
-import argparse
-from monitor import Monitor
-from misc import Commands
+
 from logger import logger
+from misc import Commands
+from monitor import Monitor
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from graphics.config import plot_conf
 from dm4l import DM4L
 
 if __name__ == '__main__':
@@ -35,7 +36,7 @@ if __name__ == '__main__':
     # Global arguments
     group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument('--logs', type=str, nargs=2, help="""log_path1,log_path2 backend1[,backend2...]
-    The backend should be in %s""" %str(dm4l.get_backends()))
+    The backend should be in %s""" %str(dm4l.get_available_handlers()))
     group.add_argument('--file', type=str, default='./monitors.conf', help="Reads: log_path<space>backend\\nlog_path... from here")
     group.add_argument('--path', type=str, default=None, nargs=2, help="Reads all logs in path. Ex. --from_path ./*.log")
     parser.add_argument('--safe', action='store_false', help="Ignore erroneous logs")
@@ -49,8 +50,8 @@ if __name__ == '__main__':
                         help="any combination of 0,1,2 where 0 = max, 1 = argmax, 2 = maxid. Ex: 0 2 = max_value id")
     #    plot subcommand
     parser_plot = subparsers.add_parser('plot')
-    parser_plot.add_argument('-x', type=str, default=plot_conf['x'], help="Data to show in x axis.")
-    parser_plot.add_argument('-y', type=str, nargs='+', default=plot_conf['y'], help="Data to show in y axis.")
+    parser_plot.add_argument('-x', type=str, default="epoch", help="Data to show in x axis.")
+    parser_plot.add_argument('-y', type=str, nargs='+', default=["test_acc"], help="Data to show in y axis.")
     parser_plot.add_argument('--title', type=str, default='')
 
     # report subcommand
@@ -80,18 +81,12 @@ if __name__ == '__main__':
     elif args.file is not None:
         dm4l.set_input(DM4L.FROM_FILE, args.file)
 
-    dm4l.update_input()
-
-    monitor = Monitor(dm4l)
     if args.subcommand == 'max':
-        monitor.set_command(Commands.MAX, {'format':args.format})
+        dm4l.set_active_plugin('max', True, {'format':args.format})
     elif args.subcommand == 'plot':
-        monitor.set_command(Commands.PLOT, {'x':args.x, 'y':args.y, 'title':args.title})
+        dm4l.set_active_plugin('plot', True, {'x':args.x, 'y':args.y, 'title':args.title})
 
-    if args.refresh > 0:
-        monitor.refresh = args.refresh
-        monitor.run()
-    else:
-        monitor.run_once()
 
+    dm4l.refresh = args.refresh
+    dm4l.run()
 

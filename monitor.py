@@ -34,8 +34,6 @@ class Monitor():
                 self.print_max()
             elif self.command == Commands.PLOT:
                 self.plot()
-        if self.command == Commands.PLOT:
-            self.dm4l.plotter.update_gui()  # so that zoom, etc can be used. Use a thread?
 
     def run(self):
         logging.getLogger('dm4l').info('Running monitor...')
