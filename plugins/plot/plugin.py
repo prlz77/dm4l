@@ -4,7 +4,7 @@ import numpy as np
 from misc import LogStatus
 import urllib
 import matplotlib
-from graphics.config import plot_conf
+from plugins.config import plot_conf
 from copy import deepcopy
 #matplotlib.use('TKAgg')
 try:
