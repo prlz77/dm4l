@@ -1,15 +1,17 @@
-.. DM4L documentation master file, created by
-   sphinx-quickstart on Tue Jul  5 19:04:12 2016.
+.. Dark Magic For Logs (DM4L) documentation master file, created by
+   sphinx-quickstart on Fri Jul  8 09:59:53 2016.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to DM4L's documentation!
-================================
+Dark Magic For Logs (DM4L)'s documentation
+==========================================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   ./*
 
 
 

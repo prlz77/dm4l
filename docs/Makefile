@@ -7,7 +7,7 @@ SPHINXBUILD   = sphinx-build
 SPHINXGEN     = sphinx-apidoc
 PAPER         =
 BUILDDIR      = build
-GENDIR        = source
+SOURCEDIR     = source
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -52,7 +52,7 @@ clean:
 
 .PHONY: html
 html:
-	$(SPHINXGEN) -f -o $(GENDIR)/ ../
+	$(SPHINXGEN) -f -o $(SOURCEDIR) ../
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
@@ -94,9 +94,9 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/DM4L.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/DarkMagicForLogsDM4L.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/DM4L.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/DarkMagicForLogsDM4L.qhc"
 
 .PHONY: applehelp
 applehelp:
@@ -113,8 +113,8 @@ devhelp:
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/DM4L"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/DM4L"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/DarkMagicForLogsDM4L"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/DarkMagicForLogsDM4L"
 	@echo "# devhelp"
 
 .PHONY: epub

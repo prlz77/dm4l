@@ -6,6 +6,7 @@ Subpackages
 
 .. toctree::
 
+    plugins.max
     plugins.plot
 
 Submodules
