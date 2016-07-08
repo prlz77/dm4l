@@ -13,6 +13,5 @@ Currently available plugins:
 
 Plugin Name | Description | Depends
 ------------|-------------|--------
-``plot`` | Uses matplotlib to generate a plot comparing multiple logs. The title, axis and legend are
-configurable. | numpy, pylab, matplotlib, [seaborn].
+``plot`` | Uses matplotlib to generate a plot comparing multiple logs. The title, axis and legend are configurable. | numpy, pylab, matplotlib, [seaborn].
 ``max`` | Gets the max score, argmax, and log id of multiple logs and returns/print them in the desired format. | numpy
