@@ -6,30 +6,9 @@
    \/,'`.\/  | |/ / | |  | |\___  || |____ \/,'`.\/
              |___/  \_|  |_/    |_/\_____/
 ```
-Dark magic for machine learning log files.
+**Dark magic for machine learning log files.**
 
-## Usage
+DM4L is a tool though to avoid rewritting full codes each time one wants to extract information from machine learning logs. For instance, when a neural network is trained in caffe, we cannot expect the logs to be comparable to torch or even to another caffe branch. Thus, if we want to plot train vs test error, we usually have to create a parser and to add matplotlib calls etc. each time. DM4L reduces all this effort to the creation of a simple shareable implementation of the concrete parser, the rest is just done by magic (and a nice and easy plugin system which makes easy to add new reusable functions like plotting, early-stopping, reporting, etc.). Basically it allows you to do all you can do from a log file and do it with any kind of log file.
 
-```
-usage: main.py [-h] [--logs LOGS [LOGS ...]]
-               [--backends BACKEND1 [ BACKEND2 BACKEND3 ...]]
-               [--from_file FROM_FILE] [--safe] [--silent] [--refresh REFRESH]
-               {max,plot,report} ...
 
-~ Dark Magic 4 Logs ~
 
-positional arguments:
-  {max,plot,report}
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --logs LOGS [LOGS ...]
-                        [list] of log file[s]. Overrides file reading
-  --backends [BACKEND1 [ BACKEND2 BACKEND3 ...]]
-                        The respective backend for each log[s]
-  --from_file FROM_FILE
-                        Reads: log_path<space>backend[<space>id[<space>pid]]\n... from "from_file"
-  --safe                Ignore erroneous logs
-  --silent              Do not show warnings
-  --refresh REFRESH     Seconds to refresh data. 0 = run once, >0 for "real-time" monitoring.
-```
