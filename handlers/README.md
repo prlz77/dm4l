@@ -7,7 +7,7 @@ The user only has to implement the ``parse`` function of a ``LogHandler``
 derived from the abstract class ``AbstractLogHandler``, which uses the provided
 log file pointer to update the ``log_data`` with the last log file changes.
 
-** Important **
+**Important**
 
 Filling the following fields is compulsory, so that all plugins have a common
 language.
