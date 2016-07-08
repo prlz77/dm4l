@@ -23,12 +23,12 @@ class Plugin(AbstractPlugin):
             pylab.ioff()
             pylab.hold(True)
 
-    def update(self, ids=[]):
+    def update(self, ids=None):
         pylab.cla()
         if len(self.dm4l.get_handlers().keys()) == 0:
             return True
 
-        if ids == []:
+        if ids is None:
             ids = self.dm4l.get_handlers().keys()
         else:
             ids = ids

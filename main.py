@@ -24,8 +24,6 @@ import os
 import sys
 
 from logger import logger
-from misc import Commands
-from monitor import Monitor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dm4l import DM4L
@@ -42,20 +40,7 @@ if __name__ == '__main__':
     parser.add_argument('--safe', action='store_false', help="Ignore erroneous logs")
     parser.add_argument('--silent', action='store_true', help='Do not show warnings')
     parser.add_argument('--refresh', type=int, default=0, help="Seconds to refresh data. 0 = run once.")
-    # Subcommand arguments
-    subparsers = parser.add_subparsers(dest='subcommand')
-    #    max subcommand
-    parser_max = subparsers.add_parser('max')
-    parser_max.add_argument('--format', default=[0], type=int, nargs='+',
-                        help="any combination of 0,1,2 where 0 = max, 1 = argmax, 2 = maxid. Ex: 0 2 = max_value id")
-    #    plot subcommand
-    parser_plot = subparsers.add_parser('plot')
-    parser_plot.add_argument('-x', type=str, default="epoch", help="Data to show in x axis.")
-    parser_plot.add_argument('-y', type=str, nargs='+', default=["test_acc"], help="Data to show in y axis.")
-    parser_plot.add_argument('--title', type=str, default='')
-
-    # report subcommand
-    #parser_report = subparsers.add_parser('--report')
+    parser.add_argument('plug', type=str, nargs='+', help="list plugins to activate")
 
     args = parser.parse_args()
 
@@ -81,6 +66,7 @@ if __name__ == '__main__':
     elif args.file is not None:
         dm4l.set_input(DM4L.FROM_FILE, args.file)
 
+    for plug in self.
     if args.subcommand == 'max':
         dm4l.set_active_plugin('max', True, {'format':args.format})
     elif args.subcommand == 'plot':

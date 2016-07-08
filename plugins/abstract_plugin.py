@@ -27,10 +27,10 @@ class AbstractPlugin(object):
             logging.getLogger('dm4l').warn('unrecognized key')
 
     @abstractmethod
-    def update(self, ids=[]):
+    def update(self, ids=None):
         """ Should be implemented by the user. Performs the main function.
 
         :param ids: ``list`` of ids of the target log handlers.
         :return:
         """
-        return NotImplementedError
+        raise NotImplementedError

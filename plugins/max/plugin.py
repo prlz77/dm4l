@@ -6,7 +6,7 @@ class Plugin(AbstractPlugin):
     def __init__(self, dm4l, config):
         super(Plugin, self).__init__(dm4l, config)
 
-    def update(self, ids=[]):
+    def update(self, ids=None):
         """ Get the max score value from a log or log list.
 
         :param handler_ids: list of the log ids to compare.
@@ -14,7 +14,7 @@ class Plugin(AbstractPlugin):
         :return: (max value, argmax value, id)
         """
         handlers = self.dm4l.get_handlers()
-        if ids == []:
+        if ids == None:
             ids = handlers.keys()
         assert(isinstance(ids, list))
         max_list = np.zeros(len(ids))
