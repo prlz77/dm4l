@@ -13,7 +13,7 @@ file config.py can also be provided.
 
 Currently available handlers:
 
-Plugin Name | Description | Depends
+Handler Name | Description | Depends
 ------------|-------------|--------
 ``misc.acc_list`` | Reads data from an accuracy list. | 
 ``torch.wide_resnet`` | Reads data in json format. | json
