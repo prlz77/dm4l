@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dm4l module &mdash; DM4L 1.0a documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="DM4L 1.0a documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> DM4L
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="simple">
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">DM4L</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>dm4l module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/dm4l.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-dm4l">
+<span id="dm4l-module"></span><h1>dm4l module<a class="headerlink" href="#module-dm4l" title="Permalink to this headline">¶</a></h1>
+<p>Dark Magic For Logs (DM4L)</p>
+<p>Uses dark magic to deal with epoch/score logs in any format. It allows:</p>
+<ul class="simple">
+<li><strong>Comparing</strong> different logs. For example getting the max accuracy between model1 trained in torch and model2 trained
+in caffe. Or even <strong>plotting</strong> them.</li>
+<li><strong>Monitoring</strong> logs. See if your models are training correctly, program early stopping, etc.</li>
+<li>Information <strong>reports</strong>. Create a report with your training log data and serve it like in NVIDIA DIGITS.</li>
+</ul>
+<dl class="class">
+<dt id="dm4l.DM4L">
+<em class="property">class </em><code class="descclassname">dm4l.</code><code class="descname">DM4L</code><a class="headerlink" href="#dm4l.DM4L" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main module of the project.
+Handles multiple logs and extracts information from them.</p>
+<dl class="attribute">
+<dt id="dm4l.DM4L.FROM_FILE">
+<code class="descname">FROM_FILE</code><em class="property"> = 1</em><a class="headerlink" href="#dm4l.DM4L.FROM_FILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input from file flag</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dm4l.DM4L.FROM_FOLDER">
+<code class="descname">FROM_FOLDER</code><em class="property"> = 2</em><a class="headerlink" href="#dm4l.DM4L.FROM_FOLDER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input from folder flag</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dm4l.DM4L.FROM_LIST">
+<code class="descname">FROM_LIST</code><em class="property"> = 3</em><a class="headerlink" href="#dm4l.DM4L.FROM_LIST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input from  list flag</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.add_from_file">
+<code class="descname">add_from_file</code><span class="sig-paren">(</span><em>file_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.add_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle all logs from an input file.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param file_path:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">file containing log_path backend [id] [pid]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="docutils">
+<dt>. If None, it updates from the last file_path.</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.add_from_folder">
+<code class="descname">add_from_folder</code><span class="sig-paren">(</span><em>pattern</em>, <em>backend</em><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.add_from_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle all logs from a given input pattern.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pattern</strong> &#8211; path. For instance: ./<a href="#id1"><span class="problematic" id="id2">*</span></a>.log</li>
+<li><strong>backend</strong> &#8211; backend handler for all the logs in this path.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.add_log">
+<code class="descname">add_log</code><span class="sig-paren">(</span><em>log_path</em>, <em>backend_handler</em>, <em>id=None</em>, <em>pid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.add_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle a new log.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>log_path</strong> &#8211; path of the log file.</li>
+<li><strong>backend_handler</strong> &#8211; kind of handle to use.</li>
+<li><strong>id</strong> &#8211; to provide a custom id. Default is log_path</li>
+<li><strong>pid</strong> &#8211; optional. The training process identifier.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">assigned id</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.get_active_plugins">
+<code class="descname">get_active_plugins</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.get_active_plugins" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.get_available_handlers">
+<code class="descname">get_available_handlers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.get_available_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the supported log handlers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string list with all the supported log handlers.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.get_handlers">
+<code class="descname">get_handlers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.get_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the active log handlers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with all the active log handlers.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.get_plugins">
+<code class="descname">get_plugins</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.get_plugins" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.get_safe_handlers">
+<code class="descname">get_safe_handlers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.get_safe_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the non erroneous handlers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns a list with the non erroneous handlers.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.remove_all_logs">
+<code class="descname">remove_all_logs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.remove_all_logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all handled logs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.remove_log">
+<code class="descname">remove_log</code><span class="sig-paren">(</span><em>id=''</em>, <em>path='./'</em><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.remove_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a handled log by its id or path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> &#8211; id to remove</li>
+<li><strong>path</strong> &#8211; path to remove</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.set_active_plugin">
+<code class="descname">set_active_plugin</code><span class="sig-paren">(</span><em>name</em>, <em>active</em>, <em>extra_config={}</em><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.set_active_plugin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.set_input">
+<code class="descname">set_input</code><span class="sig-paren">(</span><em>mode</em>, <em>input</em><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.set_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tells DM4L where to look for the log files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mode</strong> &#8211; Choose from <code class="docutils literal"><span class="pre">`{DM4L.FROM_FILE,</span> <span class="pre">DM4L.FROM_FOLDER,</span> <span class="pre">DM4L.FROM_LIST}`</span></code></li>
+<li><strong>input</strong> &#8211; If mode is</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>DM4L.FROM_FILE: path <code class="docutils literal"><span class="pre">string</span></code> to a file with <code class="docutils literal"><span class="pre">log_path&lt;space&gt;backend&lt;space&gt;[id&lt;space&gt;pid&lt;space&gt;]</span></code></li>
+<li>DM4L.FROM_FOLDER: path <code class="docutils literal"><span class="pre">string</span></code> to the logs. E.g. &#8216;./<a href="#id3"><span class="problematic" id="id4">*</span></a>.txt&#8217;</li>
+<li>DM4L.FROM_LIST: <code class="docutils literal"><span class="pre">[string</span> <span class="pre">list,</span> <span class="pre">string</span> <span class="pre">list]</span></code> like  <code class="docutils literal"><span class="pre">[[log1,log2,etc],[backend1,backend2,etc]]</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.set_safe">
+<code class="descname">set_safe</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.set_safe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets <code class="docutils literal"><span class="pre">self.safe</span></code>. When safe, handlers reporting errors are ignored.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> &#8211; <code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the state of all the log handlers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if any change, False if no changes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dm4l.DM4L.update_input">
+<code class="descname">update_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dm4l.DM4L.update_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the list of handled logs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, prlz77.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0a',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
