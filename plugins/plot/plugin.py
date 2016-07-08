@@ -6,7 +6,7 @@ from copy import deepcopy
 import numpy as np
 
 from misc import LogStatus
-from plugins.AbstractPlugin import AbstractPlugin
+from plugins.abstract_plugin import AbstractPlugin
 import matplotlib
 #matplotlib.use('QT4Agg')
 try:

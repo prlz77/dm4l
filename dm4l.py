@@ -50,12 +50,27 @@ class DM4L:
         self.end = False
 
     def get_plugins(self):
+        """
+
+        :return: a dictionary with the loaded plugins.
+        """
         return self.plugins
 
     def get_active_plugins(self):
+        """
+
+        :return: a list with the names of the currently active plugins
+        """
         return self.active_plugins
 
     def set_active_plugin(self, name, active, extra_config={}):
+        """ Activates a plugin
+
+        :param name: ``string`` name of the plugin
+        :param active: ``bool`` True to activate and False to deacivate
+        :param extra_config: list of configuration key/values to override
+        :return:
+        """
         if active:
             if name not in self.plugins:
                 path = os.path.join('plugins', name)
@@ -134,11 +149,11 @@ class DM4L:
     def set_input(self, mode, input):
         """Tells DM4L where to look for the log files.
 
-        :param mode: Choose from ```{DM4L.FROM_FILE, DM4L.FROM_FOLDER, DM4L.FROM_LIST}```
+        :param mode: Choose from ``{DM4L.FROM_FILE, DM4L.FROM_FOLDER, DM4L.FROM_LIST}``
         :param input: If mode is
-        - DM4L.FROM_FILE: path ``string`` to a file with ``log_path<space>backend<space>[id<space>pid<space>]``\n
-        - DM4L.FROM_FOLDER: path ``string`` to the logs. E.g. './*.txt'
-        - DM4L.FROM_LIST: ``[string list, string list]`` like  ``[[log1,log2,etc],[backend1,backend2,etc]]``
+                        - DM4L.FROM_FILE: path ``string`` to a file with ``log_path<space>backend<space>[id<space>pid<space>]``\n
+                        - DM4L.FROM_FOLDER: path ``string`` to the logs. E.g. './*.txt'
+                        - DM4L.FROM_LIST: ``[string list, string list]`` like  ``[[log1,log2,etc],[backend1,backend2,etc]]``
 
         """
         self.remove_all_logs()
@@ -277,6 +292,10 @@ class DM4L:
         self.log_handlers = {}
 
     def run(self):
+        """ Main loop
+
+        :return:
+        """
         if self.refresh > 0:
             logging.getLogger('dm4l').info('Running...')
             try:

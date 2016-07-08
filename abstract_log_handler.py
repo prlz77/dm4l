@@ -23,9 +23,18 @@ class AbstractLogHandler:
         self.pid = None
 
     def set_pid(self, pid):
+        """ Tell the process id to the handler for improved monitoring
+
+        :param pid: process id
+        :return:
+        """
         self.pid = pid
 
     def has_changed(self):
+        """ To check if the log/process status has changed.
+
+        :return: ``bool``. True if has chanded, False if not.
+        """
         return self.change_flag
 
     @abstractmethod

@@ -6,15 +6,16 @@ Subpackages
 
 .. toctree::
 
+    plugins.max
     plugins.plot
 
 Submodules
 ----------
 
-plugins.AbstractPlugin module
------------------------------
+plugins.abstract_plugin module
+------------------------------
 
-.. automodule:: plugins.AbstractPlugin
+.. automodule:: plugins.abstract_plugin
     :members:
     :undoc-members:
     :show-inheritance:

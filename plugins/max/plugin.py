@@ -1,4 +1,4 @@
-from plugins.AbstractPlugin import AbstractPlugin
+from plugins.abstract_plugin import AbstractPlugin
 import numpy as np
 
 
