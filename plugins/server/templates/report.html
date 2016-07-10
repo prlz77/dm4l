@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+    <script>
+        function updateHandlersStatus(data){
+            var table = ''
+            var table_header = '<tr><th>id or path</th>'
+            var first = true;
+            for (var key in data) {
+                table += '<tr><td>' + key + '</td>'
+                for (var key2 in data[key]) {
+                    if (first == true) {
+                        table_header += '<th>' + key2 + '</th>'
+                    }
+                    table += '<td>' + data[key][key2] + '</td>'
+                }
+                table += '</tr>'
+                first = false
+            }
+            table = table_header + '</tr>' + table
+            $('#handler_list').html(table)
+        }
+        function pollStatus(){
+            $.get("status", function(data, status){
+                updateHandlersStatus(data);  // process results here
+                setTimeout(pollStatus,60000);
+            });
+        }
+        $( document ).ready(function() {
+            pollStatus();
+        });
+    </script>
+
+
+    <title>Title</title>
+    <style>
+
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+        #header {
+            top: 0px;
+            left: 0px;
+            height:5%;
+            padding:5px;
+            background-color: lightgrey;
+            margin-left: 0px;
+            vertical-align: middle;
+        }
+        #title {
+            font-size:22px;
+            margin: auto;
+            vertical-align: middle;
+        }
+        #logo {
+            height:22px;
+            vertical-align: middle;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img id="logo" src="static/dm4l.ico"/> <b id="title" style='font-family:"Lucida Console", Monaco, monospace'>DM4L</b>
+        <img id="logo" src="static/dm4l.ico"/>
+    </div>
+    <div id="status_section">
+        <h2>Attached handlers</h2>
+        <table id="handler_list"></table>
+    </div>
+</body>
+</html>

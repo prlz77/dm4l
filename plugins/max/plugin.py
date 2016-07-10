@@ -21,8 +21,12 @@ class Plugin(AbstractPlugin):
         arg_list = np.zeros(len(ids))
         for i, handler_id in enumerate(ids):
             y = handlers[handler_id].log_data[self.config['value_field']]
-            max_list[i] = np.max(y)
-            arg_list[i] = np.argmax(y)
+            if len(y) > 0:
+                max_list[i] = np.max(y)
+                arg_list[i] = np.argmax(y)
+            else:
+                max_list[i] = -np.inf
+                arg_list[i] = -1
 
         max = np.max(max_list)
         id = ids[np.argmax(max_list)]

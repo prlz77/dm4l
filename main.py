@@ -67,7 +67,7 @@ if __name__ == '__main__':
         dm4l.set_input(DM4L.FROM_FILE, args.file)
 
     for plug in args.plug:
-        dm4l.set_active_plugin(plug, True)
+        dm4l.load_plugin(plug, True)
 
     dm4l.refresh = args.refresh
     dm4l.run()

@@ -63,27 +63,29 @@ class DM4L:
         """
         return self.active_plugins
 
-    def set_active_plugin(self, name, active, extra_config={}):
-        """ Activates a plugin
+    def load_plugin(self, name, active, extra_config={}):
+        """ Loads (and activates) a plugin
 
         :param name: ``string`` name of the plugin
         :param active: ``bool`` True to activate and False to deacivate
         :param extra_config: list of configuration key/values to override
         :return:
         """
+
+        if name not in self.plugins:
+            path = os.path.join('plugins', name)
+            if os.path.isdir(path):
+                if 'plugin.py' in os.listdir(path):
+                    plugin = import_module("%s.%s.%s" % ('plugins', name, 'plugin'))
+                    if 'config.py' in os.listdir(path):
+                        config = import_module("%s.%s.%s" % ('plugins', name, 'config')).config
+                    else:
+                        config = {}
+                    self.plugins[name] = plugin.Plugin(self, config)
+        for k in extra_config:
+            self.plugins[name].set_config(k, extra_config[k])
+
         if active:
-            if name not in self.plugins:
-                path = os.path.join('plugins', name)
-                if os.path.isdir(path):
-                    if 'plugin.py' in os.listdir(path):
-                        plugin = import_module("%s.%s.%s" % ('plugins', name, 'plugin'))
-                        if 'config.py' in os.listdir(path):
-                            config = import_module("%s.%s.%s" % ('plugins', name, 'config')).config
-                        else:
-                            config = {}
-                        self.plugins[name] = plugin.Plugin(self, config)
-            for k in extra_config:
-                self.plugins[name].set_config(k, extra_config[k])
             if name not in self.active_plugins:
                 self.active_plugins.append(name)
                 logging.getLogger('dm4l').info("Activated %s" %name)
@@ -93,8 +95,6 @@ class DM4L:
             if name in self.active_plugins:
                 self.active_plugins.remove(name)
                 logging.getLogger('dm4l').info("Deactivated %s" % name)
-            else:
-                logging.getLogger('dm4l').warn("Trying to deactivate %s, an unactive plugin." % name)
 
     def get_available_handlers(self):
         """ Get the supported log handlers.
