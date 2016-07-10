@@ -36,7 +36,7 @@ def run_server(queue, config):
                     data2[key]['test_acc'] = str(data[key]['test_acc'][-1])
                 if 'max_test_acc' in config['status_fields']:
                     data2[key]['test_acc'] = str(np.max(data[key]['test_acc'][-1]))
-                if 'id' in 
+                if 'id' in
 
                 data2[key]['status'] = data[key]['status']
                 if len(data[key]['epoch']) > 0:
