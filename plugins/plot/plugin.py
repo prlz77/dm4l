@@ -4,8 +4,7 @@ import urllib
 from copy import deepcopy
 
 import numpy as np
-
-from misc import LogStatus
+from handlers.abstract_log_handler import HandlerStatus
 from plugins.abstract_plugin import AbstractPlugin
 import matplotlib
 #matplotlib.use('QT4Agg')
@@ -37,7 +36,7 @@ class Plugin(AbstractPlugin):
 
         l_legend = []
         for handler_id in ids:
-            if self.dm4l.get_handlers()[handler_id].status != LogStatus.ERROR:
+            if self.dm4l.get_handlers()[handler_id].status != HandlerStatus.ERROR:
                 data = self.dm4l.get_handlers()[handler_id].get_data()
                 x = np.array(data[self.config['x']])
                 for y_field in self.config['y']:

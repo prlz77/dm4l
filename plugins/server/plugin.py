@@ -1,9 +1,12 @@
 from plugins.abstract_plugin import AbstractPlugin
-from bottle import Bottle, run, static_file
+from bottle import Bottle, run, static_file, template
 import Queue
 from threading import Thread
 from copy import deepcopy
 
+
+class Namespace():  #  workarround to access parent variables
+    pass
 
 def run_server(queue, config):
     import os
@@ -11,6 +14,8 @@ def run_server(queue, config):
     os.chdir(os.path.dirname(__file__))
     app = Bottle()
     data = {}
+    namespace = Namespace()
+    namespace.config = config
 
     @app.route('/static/<filepath:path>')
     def server_static(filepath):
@@ -18,7 +23,10 @@ def run_server(queue, config):
 
     @app.route('/')
     def index():
-        return static_file('report.html','./templates/')
+        with open('./templates/report.html','r') as input:
+            txt = input.read()
+        return template(txt, **namespace.config)
+
 
     @app.get('/status')
     def status():
@@ -27,29 +35,25 @@ def run_server(queue, config):
             for id in new_data:
                 data[id] = new_data[id]
         if data is not {}:
-            data2 = {}
+            data2 = {'data':[]} #DataTables format
             for key in data:
-                data2[key] = {}
-                if 'epoch' in config['status_fields']:
-                    data2[key]['epoch'] = str(data[key]['epoch'][-1])
-                if 'test_acc' in config['status_fields']:
-                    data2[key]['test_acc'] = str(data[key]['test_acc'][-1])
-                if 'max_test_acc' in config['status_fields']:
-                    data2[key]['test_acc'] = str(np.max(data[key]['test_acc'][-1]))
-                if 'id' in 
-
-                data2[key]['status'] = data[key]['status']
-                if len(data[key]['epoch']) > 0:
-                    data2[key]['epoch'] = str(data[key]['epoch'][-1])
-                    data2[key]['test_acc'] = str(data[key]['test_acc'][-1])
-                    data2[key]['max_acc'] = str(np.max(data[key]['test_acc']))
-                else:
-                    if data2[key]['status'] == 'TRAINING':
-                        data2[key]['epoch'] = '0'
-                        data2[key]['test_acc'] = '0'
+                data2['data'].append({})
+                for field in config['status_fields']:
+                    if field == 'id':
+                        data2['data'][-1][field] = key
+                    elif field == 'max_acc':
+                        if len(data[key]['test_acc']) == 0:
+                            data2['data'][-1][field] = 'Null'
+                        else:
+                            data2['data'][-1][field] = str(np.max(data[key]['test_acc']))
+                    elif isinstance(data[key][field], list):
+                        if len(data[key][field]) > 0:
+                            data2['data'][-1][field] = str(data[key][field][-1])
+                        else:
+                            data2['data'][-1][field] = 'Null'
                     else:
-                        data2[key]['epoch'] = 'unknown'
-                        data2[key]['test_acc'] = 'unknown'
+                        data2['data'][-1][field] = str(data[key][field])
+            print data2
             return data2
         else:
             return {}

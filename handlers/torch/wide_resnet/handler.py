@@ -1,6 +1,8 @@
 import json
-from abstract_log_handler import AbstractLogHandler
-from misc import LogStatus
+
+from handlers.abstract_log_handler import AbstractLogHandler
+from misc import HandlerStatus
+
 
 def match(start_symbol, end_symbol, buffer):
     counter = 0
@@ -33,8 +35,8 @@ class LogHandler(AbstractLogHandler):
         for l in buffer_list:
             if 'json_stats' in l:
                 line = l
-                if self.status != LogStatus.TRAINING:
-                    self.status = LogStatus.TRAINING
+                if self.status != HandlerStatus.TRAINING:
+                    self.status = HandlerStatus.TRAINING
                 if l[-1] == '}':
                     data = json.loads(l[l.find('{'):])
                     for field in data:

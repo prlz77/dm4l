@@ -1,8 +1,13 @@
 import logging
 from abc import ABCMeta, abstractmethod
-from misc import LogStatus
+import sys
 import psutil
 
+class HandlerStatus:
+    INIT = "INIT"
+    TRAINING = "TRAINING"
+    ERROR = "ERROR"
+    FINISHED = "FINISHED"
 
 class AbstractLogHandler:
     __metaclass__ = ABCMeta
@@ -16,7 +21,7 @@ class AbstractLogHandler:
         self.log_data = {}
         self.persistent_log_data = {}
         self.log_path = log_path
-        self.status = LogStatus.INIT # INIT, TRAINING, ERROR, FINISHED
+        self.status = HandlerStatus.INIT # INIT, TRAINING, ERROR, FINISHED
         self.handler_settings = {}
         self.past_data = {}
         self.change_flag = False
@@ -59,9 +64,9 @@ class AbstractLogHandler:
         """
         Makes the update step safe. There is no need to override.
         """
-        if self.status != LogStatus.ERROR or \
-          (self.status == LogStatus.FINISHED and self.log_data == {}) or \
-           self.status == LogStatus.TRAINING:
+        if self.status != HandlerStatus.ERROR or \
+          (self.status == HandlerStatus.FINISHED and self.log_data == {}) or \
+           self.status == HandlerStatus.TRAINING:
             try:
                 self.change_flag = self.parse()
                 assert(type(self.change_flag) == bool)
@@ -77,10 +82,10 @@ class AbstractLogHandler:
                 logging.getLogger('dm4l').error("Error parsing %s" %self.log_path)
                 raise e
             except:
-                self.status = LogStatus.ERROR
+                self.status = HandlerStatus.ERROR
                 logging.getLogger('dm4l').warn("Error parsing %s." %self.log_path)
 
             if self.pid is not None:
                 if not psutil.pid_exists(self.pid):
-                    self.status = LogStatus.FINISHED
+                    self.status = HandlerStatus.FINISHED
         return self.change_flag
