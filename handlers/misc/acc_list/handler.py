@@ -1,5 +1,4 @@
-from abstract_log_handler import AbstractLogHandler
-from misc import LogStatus
+from handlers.abstract_log_handler import AbstractLogHandler, HandlerStatus
 
 
 class LogHandler(AbstractLogHandler):
@@ -26,8 +25,8 @@ class LogHandler(AbstractLogHandler):
             self.buffer = ''
 
             for l in buffer_list:
-                if self.status != LogStatus.TRAINING:
-                    self.status = LogStatus.TRAINING
+                if self.status != HandlerStatus.TRAINING:
+                    self.status = HandlerStatus.TRAINING
                 if 'test_acc' not in self.log_data and l != '':
                     self.log_data['test_acc'] = [float(l)]
                     self.log_data['epoch'] = [self.epoch]

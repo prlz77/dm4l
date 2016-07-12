@@ -21,7 +21,7 @@ import sys
 import numpy as np
 from importlib import import_module
 from logger import logger
-from misc import LogStatus
+from handlers.abstract_log_handler import HandlerStatus
 
 
 class DM4L:
@@ -133,7 +133,7 @@ class DM4L:
         """
         safe_handlers = {}
         for id in self.log_handlers:
-            if self.log_handlers[id].status != LogStatus.ERROR:
+            if self.log_handlers[id].status != HandlerStatus.ERROR:
                 safe_handlers[id] = self.log_handlers[id]
 
         return safe_handlers
