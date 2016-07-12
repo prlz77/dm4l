@@ -42,7 +42,8 @@ class Plugin(AbstractPlugin):
                 x = np.array(data[self.config['x']])
                 for y_field in self.config['y']:
                     y = self._process_y(np.array(data[y_field]))
-                    pylab.plot(x, y)
+                    styles = ['-', '--']
+                    pylab.plot(x, y, styles[np.random.randint(0, len(styles))])
                     pylab.xlabel(self.config['x'])
                     if len(set(self.config['y'])) == 1:
                         l_legend += [handler_id]
