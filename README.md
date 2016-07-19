@@ -38,6 +38,7 @@ clone this repository and install:
 
 # Add a new [plugin](https://github.com/prlz77/dm4l/tree/master/plugins)
 I encourage anyone to add his own features and to share them with the rest.
+
 1. Create a folder with your plugin name.
 2. Copy the abstract_plugin.py inside the folder.
 3. Write your own update function.
@@ -47,6 +48,7 @@ I encourage anyone to add his own features and to share them with the rest.
 # Add a new [handler](https://github.com/prlz77/dm4l/tree/master/handlers)
 You can add your own handlers with a similar procedure. We encourage the community to
 add handlers since sharing them will eliminate the need of rewriting them every time.
+
 1. Create a folder with your handler name.
 2. Copy the abstract_log_handler.py inside the folder.
 3. Write your own parse function.
