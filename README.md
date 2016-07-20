@@ -21,6 +21,7 @@ DM4L is a tool thought to **avoid rewritting full codes** each time one wants to
 - [x] Max Plugin
 - [ ] Webserver interface with bottle (**under development**)
 - [ ] Early stopping pluggin.
+- [ ] E-mail on event.
 - Handler System
 - [x] Core 
 - [x] Accuracy list parser
