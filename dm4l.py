@@ -73,7 +73,7 @@ class DM4L:
         """
         if active:
             if name not in self.plugins:
-                path = os.path.join('plugins', name)
+                path = os.path.join(self.dark_path,'plugins', name)
                 if os.path.isdir(path):
                     if 'plugin.py' in os.listdir(path):
                         plugin = import_module("%s.%s.%s" % ('plugins', name, 'plugin'))
