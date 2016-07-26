@@ -1,7 +1,5 @@
 import json
-
-from handlers.abstract_log_handler import AbstractLogHandler
-from misc import HandlerStatus
+from handlers.abstract_log_handler import AbstractLogHandler, HandlerStatus
 
 
 def match(start_symbol, end_symbol, buffer):
