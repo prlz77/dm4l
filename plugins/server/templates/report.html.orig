@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<<<<<<< HEAD
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf-5.5.2/jq-2.2.3/dt-1.10.12/datatables.min.css"/>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/zf-5.5.2/jq-2.2.3/dt-1.10.12/datatables.min.js"></script>
+
+
+=======
+    <script src="static/jquery-2.0.0.min.js"></script>
+    <script src="static/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <link href="static/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/DataTables/datatables.min.css"/>
+    <script type="text/javascript" src="static/DataTables/datatables.min.js"></script>
+    <script src="static/Highcharts-4.2.5/js/highcharts.js"></script>
+    <script src="static/Highcharts-4.2.5/js/modules/data.js"></script>
+    <script src="static/Highcharts-4.2.5/js/modules/exporting.js"></script>
+>>>>>>> 52229ed957bbbac34b0e11806e1cf7a183a73a80
+
+
+    <script>
+        function updateHandlersStatus(data){
+            var table = ''
+            var table_header = '<tr><th>id or path</th>'
+            var first = true;
+            for (var key in data) {
+                table += '<tr><td>' + key + '</td>'
+                for (var key2 in data[key]) {
+                    if (first == true) {
+                        table_header += '<th>' + key2 + '</th>'
+                    }
+                    table += '<td>' + data[key][key2] + '</td>'
+                }
+                table += '</tr>'
+                first = false
+            }
+            table = table_header + '</tr>' + table
+            $('#handler_list').html(table)
+        }
+        function pollStatus(){
+            $.get("status", function(data, status){
+                updateHandlersStatus(data);  // process results here
+                setTimeout(pollStatus,60000);
+            });
+        }
+        $( document ).ready(function() {
+            //pollStatus();
+            $('#handler_list').DataTable( {
+                ajax: {
+                    url: 'status',
+                },
+                columns: [
+                    % for item in status_fields:
+                        { data : '{{ item }}' },
+                    % end
+                ],
+                paging : false,
+                scrollX: true,
+                colReorder: true,
+                fixedHeader: true,
+                rowReorder: true,
+                select: true,
+                columnDefs: [
+                    { targets: '_all', width: '20px' }
+                ],
+            } );
+
+            var table = $('#handler_list').DataTable();
+
+            table.on( 'select', function ( e, dt, type, indexes ) {
+                if ( type === 'row' ) {
+                    alert('select')
+                }
+            } );
+            table.on( 'deselect', function ( e, dt, type, indexes ) {
+                if ( type === 'row' ) {
+                    var data = table.rows( indexes ).data().pluck( 'id' );
+                    //var data = table.rows( table.rows({selected:true}) ).data().pluck( 'id' );
+                    $.post( "select", { id: data }, remake_charts() );
+                    // do something with the ID of the selected items
+                }
+            } );
+            function remake_charts() {
+                // Get the CSV and create the chart
+                $.get('/get_plot_data', function (csv) {
+                    console.log(csv)
+                    $('#plot_container').highcharts({
+                            data: {
+                                csv: csv
+                            },
+
+                    });
+                });
+
+            }
+        });
+
+    </script>
+
+
+    <title>Title</title>
+    <style>
+
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+        #header {
+            top: 0px;
+            left: 0px;
+            height:5%;
+            padding:5px;
+            background-color: lightgrey;
+            margin-left: 0px;
+            vertical-align: middle;
+        }
+        #title {
+            font-size:22px;
+            margin: auto;
+            vertical-align: middle;
+        }
+        #logo {
+            height:22px;
+            vertical-align: middle;
+        }
+
+        th, td {
+            white-space: nowrap;
+            max-width: 10px;
+            overflow: hidden;
+            direction:rtl;
+        }
+
+        .add-overflow {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img id="logo" src="static/dm4l.ico"/> <b id="title" style='font-family:"Lucida Console", Monaco, monospace'>DM4L</b>
+        <img id="logo" src="static/dm4l.ico"/>
+    </div>
+<<<<<<< HEAD
+    <div id="status_section">
+        <h2>Attached handlers</h2>
+        <table id="handler_list" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                % for item in status_fields:
+                    <th>{{ item }}</th>
+                % end
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+=======
+    <div class="container col-xs-5">
+        <div id="status_section">
+            <h2>Attached handlers</h2>
+            <table id="handler_list" class="display compact nowrap" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        % for item in status_fields:
+                            <td>{{item}}</td>
+                        % end
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+>>>>>>> 52229ed957bbbac34b0e11806e1cf7a183a73a80
+    </div>
+        <div class="col-xs-7">
+            <h1>Plot</h1>
+            <div id="plot_container"></div>
+        </div>
+</body>
+</html>
