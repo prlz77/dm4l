@@ -63,10 +63,26 @@ Dark magic can be used as a simple commandline tool or directly importing dm4l.p
 The commandline script basically takes the following structure:
 ``[options] [input] plugin1 plugin2...``
 
-Let's say we want to create a plot comparing all the accuracies of the logs in a given path:
+Let's say we want to create a plot comparing all the accuracies (in list format) of the logs in a path:
+
+![](https://raw.githubusercontent.com/prlz77/dm4l/gh-pages/snapshots/folders.jpg)
+
+Then we can run:
 
 ```pyhon
-python main.py --path path/of/logs/*/*.log plot
+python main.py --path logs/*/test.log misc.acc_list plot
+```
+
+And obtain:
+
+<img src="https://raw.githubusercontent.com/prlz77/dm4l/gh-pages/snapshots/example_plot.png" width="512" />
+
+That easy? Yes :)
+
+If we want them to update in real time (every 1sec for instance):
+
+```pyhon
+python main.py --refresh 1 --path logs/*/test.log misc.acc_list plot
 ```
 
 # Author
